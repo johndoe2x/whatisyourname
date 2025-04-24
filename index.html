@@ -93,6 +93,29 @@
       animation: bounce 1s infinite;
     }
 
+    #customTextInput {
+      margin-top: 30px;
+      font-size: 4.5vw;
+      padding: 12px;
+      width: 90%;
+      max-width: 320px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #speakCustomTextBtn {
+      margin-top: 10px;
+      padding: 14px 24px;
+      background: linear-gradient(to right, #ff8a65, #ffcc80);
+      border: none;
+      border-radius: 50px;
+      font-size: 5vw;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -128,7 +151,7 @@
       h2 {
         font-size: 24px;
       }
-      input[type="text"], input[type="file"], .main-buttons button {
+      input[type="text"], input[type="file"], .main-buttons button, #customTextInput, #speakCustomTextBtn {
         font-size: 18px;
       }
       #reward {
@@ -150,8 +173,11 @@
 
   <div class="main-buttons">
     <button class="ask-btn" onclick="askName()">🗣️ What’s your name?</button>
-    <button class="say-btn" id="nameButton" onclick="sayOnlyName()">________</button>
+    <button class="say-btn" id="nameButton" onclick="sayOnlyName()">👶 ________</button>
   </div>
+
+  <input type="text" id="customTextInput" placeholder="Type anything to speak..." />
+  <button id="speakCustomTextBtn" onclick="speakCustomText()">🔊 Speak This</button>
 
   <div id="reward">🌟 Great job! 🌟</div>
 
@@ -164,6 +190,7 @@
     const uploadImage = document.getElementById('uploadImage');
     const reward = document.getElementById('reward');
     const dingSound = document.getElementById('dingSound');
+    const customTextInput = document.getElementById('customTextInput');
 
     // Fix for mobile browsers to unlock TTS
     window.addEventListener('touchstart', () => {
@@ -185,7 +212,7 @@
 
     nameInput.addEventListener('input', () => {
       const name = getName();
-      nameButton.textContent = name || "________";
+      nameButton.textContent = name ? `👶 ${name}` : "👶 ________";
     });
 
     function getName() {
@@ -216,6 +243,13 @@
         speak(name, showReward);
       } else {
         speak("No name entered");
+      }
+    }
+
+    function speakCustomText() {
+      const text = customTextInput.value.trim();
+      if (text !== '') {
+        speak(text);
       }
     }
 
