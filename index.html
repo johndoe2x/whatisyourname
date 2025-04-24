@@ -165,6 +165,12 @@
     const reward = document.getElementById('reward');
     const dingSound = document.getElementById('dingSound');
 
+    // Fix for mobile browsers to unlock TTS
+    window.addEventListener('touchstart', () => {
+      const dummy = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(dummy);
+    }, { once: true });
+
     uploadImage.addEventListener('change', function () {
       const file = this.files[0];
       if (file) {
@@ -188,11 +194,15 @@
 
     function speak(text, callback = null) {
       const synth = window.speechSynthesis;
+      if (synth.speaking) synth.cancel();
+
       const utterThis = new SpeechSynthesisUtterance(text);
       utterThis.onend = () => {
         dingSound.play();
         if (callback) callback();
       };
+
+      synth.resume();
       synth.speak(utterThis);
     }
 
